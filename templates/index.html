@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xml:lang="en" lang="en">
+<head>
+    <title>mutorus</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="{{url_for('static',filename='mutorus.css')}}" />
+    <script src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='mutorus.js') }}"></script>
+</head>
+<body>
+    <div id="ytsearch">
+        <form id="qf">
+            <input name="q" type="text" placeholder="what do you want to watch?" />
+            <input name="qs" type="submit" value="find" />
+            <button id="qn">next</button>
+        </form>
+    </div>
+    <div id="ytframe">You need Flash player 8+ and JavaScript enabled to view this video.</div>
+</body>
+</html>
