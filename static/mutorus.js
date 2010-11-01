@@ -9,7 +9,7 @@ function log(msg) {
 }
 
 $(document).ready(function () {
-    $("#qn").click(function () { log('button next');want_new = true; next(); return false;});
+    $("#qn").click(function () { want_new = true; next(); return false;});
     $("#qf").submit(function () { want_new = true; lk(); return false;});
 });
 
