@@ -1,0 +1,13 @@
+warning: not production code.
+
+provides:
+    trivial youtube jukebox
+
+usage:
+    python serve.py
+    open web browser at address given.
+
+needs:
+    python-gdata
+    python-flask
+
