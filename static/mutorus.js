@@ -9,14 +9,26 @@ function log(msg) {
 }
 
 $(document).ready(function () {
-    $("#qn").click(function () { want_new = true; next(); return false;});
-    $("#qf").submit(function () { want_new = true; lk(); return false;});
+    $("#qn").click(function () { want(); next(); return false;});
+    $("#qf").submit(function () { want(); lk(); return false;});
 });
 
 function onYouTubePlayerReady(playerId) {
     var ytplay = document.getElementById("ytplay");
     ytplay.addEventListener("onStateChange", "sc");
     ytplay.addEventListener("onError", "next");
+}
+
+function want() {
+    $('input[name="q"]').css('background-color','yellow');
+    log('want ' + $('input[name="q"]').css('background-color'));
+    want_new = true;
+}
+
+function got() {
+    $('input[name="q"]').css('background-color','');
+    log('got ' + $('input[name="q"]').css('background-color'));
+    want_new = false;
 }
 
 function sc(state) { if (state == 0) { next(); } }
@@ -26,7 +38,7 @@ function next() {
         var ytplay = document.getElementById("ytplay");
         var vid = queue.pop();
         ytplay.loadVideoByUrl(vid.url,0);
-        want_new = false;
+        got();
     }
     if (queue.length < 3) {
         lk();
@@ -36,7 +48,6 @@ function next() {
 function lk() {
     var qq = $('input[name="q"]').val();
     $.getJSON(root+'/z', {q: qq},up);
-    return false;
 }
 
 function up(data) {
