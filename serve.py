@@ -5,13 +5,9 @@ import random
 
 app = Flask(__name__)
 
-def mkquery(keywords, offset):
-    qq = gdata.youtube.service.YouTubeVideoQuery()
-    qq.vq = keywords
-    qq.orderby = 'relevance'
-    qq.racy = 'exclude'
-    qq.start_index = offset
-    return qq
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/z')
 def suggest():
@@ -31,9 +27,13 @@ def suggest():
     random.shuffle(results)
     return jsonify(vs=results)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+def mkquery(keywords, offset):
+    qq = gdata.youtube.service.YouTubeVideoQuery()
+    qq.vq = keywords
+    qq.orderby = 'relevance'
+    qq.racy = 'exclude'
+    qq.start_index = offset
+    return qq
 
 if __name__ == '__main__':
     app.debug = True
