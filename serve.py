@@ -1,23 +1,35 @@
 from flask import Flask, render_template, g, request, jsonify
 import gdata.youtube
 import gdata.youtube.service
+import random
 
 app = Flask(__name__)
+
+def mkquery(keywords, offset):
+    qq = gdata.youtube.service.YouTubeVideoQuery()
+    qq.vq = keywords
+    qq.orderby = 'relevance'
+    qq.racy = 'exclude'
+    qq.start_index = offset
+    return qq
 
 @app.route('/z')
 def suggest():
     q = request.args.get('q', '', type=str)
-    if not q:
+    o = request.args.get('o', 1, type=int)
+    if not q or not o:
         return jsonify(vs=[])
     yt = gdata.youtube.service.YouTubeService()
     yt.ssl = False
-    qq = gdata.youtube.service.YouTubeVideoQuery()
-    qq.vq = q
-    qq.orderby = 'relevance'
-    qq.racy = 'exclude'
-    return jsonify(vs=[{'title':v.media.title.text,
-                        'duration':v.media.duration.seconds,
-                        'url':v.GetSwfUrl()} for v in yt.YouTubeQuery(qq).entry])
+    keywords = [keyword.strip() for keyword in q.split(',')]
+    qs = [mkquery(keyword, o) for keyword in keywords]
+    results = [{'title':v.media.title.text,
+                'duration':v.media.duration.seconds,
+                'url':v.GetSwfUrl()}
+               for qq in qs
+               for v in yt.YouTubeQuery(qq).entry]
+    random.shuffle(results)
+    return jsonify(vs=results)
 
 @app.route('/')
 def index():
