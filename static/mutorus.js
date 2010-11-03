@@ -21,7 +21,7 @@ function onYouTubePlayerReady(playerId) {
 }
 
 function want() {
-    $('input[name="q"]').css('background-color','yellow');
+    $('#q').css('background-color','yellow');
     want_new = true;
 }
 
@@ -31,7 +31,7 @@ function err() {
 }
 
 function got() {
-    $('input[name="q"]').css('background-color','');
+    $('#q').css('background-color','');
     want_new = false;
 }
 
@@ -50,7 +50,7 @@ function next() {
 }
 
 function lk() {
-    var qq = $('input[name="q"]').val();
+    var qq = $('#q').val();
     $.getJSON(root+'/z', {q: qq, o: offset},up);
 }
 
