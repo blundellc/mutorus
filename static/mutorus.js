@@ -17,12 +17,17 @@ $(document).ready(function () {
 function onYouTubePlayerReady(playerId) {
     var ytplay = document.getElementById("ytplay");
     ytplay.addEventListener("onStateChange", "sc");
-    ytplay.addEventListener("onError", "next");
+    ytplay.addEventListener("onError", "err");
 }
 
 function want() {
     $('input[name="q"]').css('background-color','yellow');
     want_new = true;
+}
+
+function err() {
+    log('yt error');
+    next();
 }
 
 function got() {
@@ -53,7 +58,6 @@ function up(data) {
     for (var ii = 0; ii < data.vs.length; ii++) {
         queue.push(data.vs[ii]);
     }
-    log('offset: ' +offset+', '+data.last);
     offset += data.last;
     if (queue.length > 0 && want_new) {
         next();
