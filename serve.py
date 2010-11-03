@@ -24,8 +24,12 @@ def suggest():
                 'url':v.GetSwfUrl()}
                for qq in qs
                for v in yt.YouTubeQuery(qq).entry]
+    if len(qs):
+        last = len(results)//len(qs)
+    else:
+        last = 0
     random.shuffle(results)
-    return jsonify(vs=results)
+    return jsonify(vs=results, last=last)
 
 def mkquery(keywords, offset):
     qq = gdata.youtube.service.YouTubeVideoQuery()

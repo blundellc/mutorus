@@ -1,6 +1,7 @@
 var root='';
 var want_new = false;
 var queue = [];
+var offset = 1;
 
 function log(msg) {
     setTimeout(function() {
@@ -10,7 +11,7 @@ function log(msg) {
 
 $(document).ready(function () {
     $("#qn").click(function () { want(); next(); return false;});
-    $("#qf").submit(function () { want(); lk(); return false;});
+    $("#qf").submit(function () { want(); queue=[]; offset=1; lk(); return false;});
 });
 
 function onYouTubePlayerReady(playerId) {
@@ -21,13 +22,11 @@ function onYouTubePlayerReady(playerId) {
 
 function want() {
     $('input[name="q"]').css('background-color','yellow');
-    log('want ' + $('input[name="q"]').css('background-color'));
     want_new = true;
 }
 
 function got() {
     $('input[name="q"]').css('background-color','');
-    log('got ' + $('input[name="q"]').css('background-color'));
     want_new = false;
 }
 
@@ -47,13 +46,15 @@ function next() {
 
 function lk() {
     var qq = $('input[name="q"]').val();
-    $.getJSON(root+'/z', {q: qq},up);
+    $.getJSON(root+'/z', {q: qq, o: offset},up);
 }
 
 function up(data) {
     for (var ii = 0; ii < data.vs.length; ii++) {
         queue.push(data.vs[ii]);
     }
+    log('offset: ' +offset+', '+data.last);
+    offset += data.last;
     if (queue.length > 0 && want_new) {
         next();
     }
