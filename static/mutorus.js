@@ -90,7 +90,7 @@ function next() {
     }
 }
 
-function lk() { $.getJSON('/z', {q: $('#q').val(), o: offset},up); }
+function lk() { $.getJSON('/z', {q: $('#q').val()||'', o: offset||1},up); }
 
 function up(data) {
     for (var ii = 0; ii < data.vs.length; ii++) {
