@@ -3,7 +3,8 @@
 var want_new = false;
 var queue = [];
 var offset = 1;
-var hash = 'NBDAunPkSAY';
+var hash = '';
+var scrobbed = true;
 
 function log(msg) {
     setTimeout(function() {
@@ -25,6 +26,7 @@ function want() {
 function watch(vid) {
     play(vid.hash);
     want_new = false;
+    scrobbed = false;
     hash = vid.hash;
     document.title = vid.title+' (mutorus)';
     $('#q').css('background-color','');
@@ -68,19 +70,22 @@ function save() {
 function restore() {
     if (location.hash && location.hash != '/') {
         var h = location.hash.slice(1).split('/');
-        hash = h.shift();
-        offset = parseInt(h.shift());
-        var q = h.shift();
+        hash = h.shift()||'';
+        offset = parseInt(h.shift())||1;
+        var q = h.shift()||'';
         for (var i = 0; i < h.length; i++) {
             q = q + '/' + h[i];
         }
         $('#q').val(q);
         lk();
-        watch({'hash':hash,'watch':'','title':q});
+        if (hash) {
+            watch({'hash':hash,'watch':'','title':q});
+        }
     }
 }
 
 function next() {
+    scrob();
     want();
     if (queue.length > 0) {
         watch(queue.pop());
@@ -100,6 +105,25 @@ function up(data) {
     if (queue.length > 0 && want_new) {
         next();
     }
+}
+
+function scrob() {
+    if (scrobbed) {
+        return;
+    }
+    var ytplay = document.getElementById("ytplay");
+    var remaining = -1;
+    if (ytplay) {
+        var duration = ytplay.getDuration();
+        if (duration) {
+            var pos = ytplay.getCurrentTime();
+            if (pos) {
+                remaining = duration - pos;
+            }
+        }
+    }
+    $.getJSON('/scrob', {h: hash||'', r: remaining},function(){});
+    scrobbed = true;
 }
 
 //})();
