@@ -2,12 +2,12 @@ import urllib2, gzip, StringIO
 # parsing stuff
 import xml.dom.minidom
 try:
-# funky stuff we need:
+# funky stuff we need (more complicated than necessary? old code):
 # - for parsing (python-html5lib)
     import html5lib
 # - for dealing with character sets (python-chardet)
     import chardet
-# - of course, debian enjoys screwing over python users, so we have to use 4suite's xml
+# - for making a dom (python-4suite-xml)
     import Ft.Xml.Domlette as domlette
 # 4suite xml's ConvertDocument only supports a very limited set of nodeType's:
 # let's delete these nodes completely for now.
@@ -81,9 +81,7 @@ def parse_html(html):
             cur = fringe.pop()
             for child in cur.childNodes:
                 if child.nodeType not in hack_4suite_ok:
-                    print 'ditching:',child
                     cur.removeChild(child)
-                    # unless we do this, amazon.co.uk won't work.
                     for grandchild in child.childNodes:
                         cur.appendChild(grandchild)
             fringe.extend(cur.childNodes)
